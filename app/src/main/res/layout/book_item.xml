@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pl.hypeapp.materialtimelineview.MaterialTimelineView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/material_timeline_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:timeline_bottom_radio_color="?android:textColorPrimary"
+    app:timeline_line_color="?android:textColorPrimary"
+    app:timeline_margin_start="32dp"
+    app:timeline_position="middle"
+    app:timeline_radio_outline_radius="12"
+    app:timeline_radio_radius="4"
+    app:timeline_top_radio_color="?android:textColorPrimary"
+    app:timeline_type="line">
+
+    <ImageView
+        android:id="@+id/bookThumb"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:background="#000"
+        app:layout_constraintBottom_toBottomOf="@+id/bookDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/bookName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="?android:textColorPrimary"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/bookThumb"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Book name" />
+
+    <TextView
+        android:id="@+id/bookAuthorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/bookThumb"
+        app:layout_constraintTop_toBottomOf="@+id/bookName"
+        tools:text="Author name" />
+
+    <TextView
+        android:id="@+id/bookDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="16dp"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/bookThumb"
+        app:layout_constraintTop_toBottomOf="@+id/bookAuthorName"
+        tools:text="9999/12/33" />
+
+    <TextView
+        android:id="@+id/bookState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bookDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Finished" />
+
+</pl.hypeapp.materialtimelineview.MaterialTimelineView>
