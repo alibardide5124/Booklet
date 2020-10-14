@@ -1,7 +1,8 @@
-package com.alibardide.booklet
+package com.alibardide.booklet.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.alibardide.booklet.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
