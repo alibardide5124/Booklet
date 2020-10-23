@@ -1,5 +1,6 @@
 package com.alibardide.booklet.data.repository
 
+import android.util.Log
 import com.alibardide.booklet.data.local.db.AppDatabase
 import com.alibardide.booklet.data.local.db.dao.BookDao
 import com.alibardide.booklet.data.model.Book

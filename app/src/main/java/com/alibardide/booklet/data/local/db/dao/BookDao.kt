@@ -3,6 +3,7 @@ package com.alibardide.booklet.data.local.db.dao
 import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
+import android.util.Log
 import com.alibardide.booklet.data.local.db.AppDatabase
 import com.alibardide.booklet.data.model.Book
 

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Booklet</string>
+    <string name="new_book">new Book</string>
+    <string name="book_thumbnail">Book thumbnail</string>
 </resources>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/bookImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:src="@drawable/add_pic"
+                android:scaleType="fitCenter"
+                app:layout_constraintWidth_percent="0.3"
+                app:layout_constraintBottom_toBottomOf="@+id/bookPublisher"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/bookName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Name"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookImage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/bookAuthorName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Author name"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookImage"
+                app:layout_constraintTop_toBottomOf="@+id/bookName" />
+
+            <EditText
+                android:id="@+id/bookPublisher"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Publisher"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookImage"
+                app:layout_constraintTop_toBottomOf="@+id/bookAuthorName" />
+
+            <TextView
+                android:id="@+id/bookCategory"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?selectableItemBackground"
+                android:focusable="false"
+                android:text="Category"
+                android:inputType="text"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintEnd_toStartOf="@+id/bookDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bookPublisher" />
+
+            <TextView
+                android:id="@+id/bookDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:padding="8dp"
+                android:singleLine="true"
+                android:text="Date"
+                android:focusable="false"
+                android:background="?selectableItemBackground"
+                android:textSize="@dimen/edtBook"
+                app:boxBackgroundColor="#fff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/bookReadPages"
+                app:layout_constraintTop_toBottomOf="@+id/bookPublisher" />
+
+            <TextView
+                android:id="@+id/bookStateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:text="State"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bookCategory" />
+
+            <Spinner
+                android:id="@+id/bookStateSpinner"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/bookStateText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/bookStateText"
+                app:layout_constraintTop_toTopOf="@+id/bookStateText" />
+
+            <EditText
+                android:id="@+id/bookTotalPages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:hint="Total Pages"
+                android:inputType="number"
+                android:maxLength="5"
+                android:singleLine="true"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintEnd_toStartOf="@+id/bookReadPages"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bookStateText" />
+
+            <EditText
+                android:id="@+id/bookReadPages"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Read Pages"
+                android:inputType="number"
+                android:maxLength="5"
+                android:singleLine="true"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@+id/bookTotalPages"
+                app:layout_constraintTop_toBottomOf="@+id/bookStateText" />
+
+            <EditText
+                android:id="@+id/bookDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:maxLines="10"
+                android:hint="Description"
+                android:inputType="text"
+                android:textSize="@dimen/edtBook"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/bookTotalPages" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/bookCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorRed"
+        app:icon="@drawable/ic_plus"
+        app:iconSize="18dp"
+        app:iconTint="?android:textColorPrimaryInverse" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/bookSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_gravity="bottom|end"
+        android:text="Save"
+        android:textColor="?android:textColorPrimaryInverse"
+        android:textSize="12dp"
+        app:backgroundTint="@color/colorAccent"
+        app:icon="@drawable/ic_plus"
+        app:iconSize="18dp"
+        app:iconTint="?android:textColorPrimaryInverse">
+
+    </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

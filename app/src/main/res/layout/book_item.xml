@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<pl.hypeapp.materialtimelineview.MaterialTimelineView xmlns:android="http://schemas.android.com/apk/res/android"
+<pl.hypeapp.materialtimelineview.MaterialTimelineView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/material_timeline_view"
+    android:theme="@style/BlueTheme"
+    android:id="@+id/bookItemTimeline"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:timeline_bottom_radio_color="?android:textColorPrimary"
@@ -10,67 +12,119 @@
     app:timeline_margin_start="32dp"
     app:timeline_position="middle"
     app:timeline_radio_outline_radius="12"
-    app:timeline_radio_radius="4"
+    app:timeline_radio_radius="5"
     app:timeline_top_radio_color="?android:textColorPrimary"
     app:timeline_type="line">
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginEnd="16dp"
+        android:background="#88000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
-        android:id="@+id/bookThumb"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:id="@+id/bookItemThumb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:adjustViewBounds="true"
-        android:background="#000"
-        app:layout_constraintBottom_toBottomOf="@+id/bookDate"
+        android:contentDescription="@string/book_thumbnail"
+        android:src="@drawable/add_pic"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        app:layout_constraintWidth_percent="0.2" />
 
     <TextView
-        android:id="@+id/bookName"
-        android:layout_width="wrap_content"
+        android:id="@+id/bookItemName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:textColor="?android:textColorPrimary"
         android:textSize="15sp"
-        app:layout_constraintStart_toEndOf="@+id/bookThumb"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Book name" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@+id/bookItemThumb"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        tools:text="Digital minimalism" />
 
     <TextView
-        android:id="@+id/bookAuthorName"
-        android:layout_width="wrap_content"
+        android:id="@+id/bookItemAuthorName"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
+        android:layout_marginEnd="30dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:textColor="?android:textColorSecondary"
         android:textSize="12sp"
-        app:layout_constraintStart_toEndOf="@+id/bookThumb"
-        app:layout_constraintTop_toBottomOf="@+id/bookName"
-        tools:text="Author name" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@+id/bookItemThumb"
+        app:layout_constraintTop_toBottomOf="@+id/bookItemName"
+        tools:text="Cal Newport" />
 
     <TextView
-        android:id="@+id/bookDate"
+        android:id="@+id/bookItemCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="?android:textColorSecondary"
+        android:textSize="12sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@+id/bookItemThumb"
+        app:layout_constraintTop_toBottomOf="@+id/bookItemAuthorName"
+        tools:text="Self-Development" />
+
+    <TextView
+        android:id="@+id/bookItemDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
         android:textColor="?android:textColorSecondary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/bookThumb"
-        app:layout_constraintTop_toBottomOf="@+id/bookAuthorName"
-        tools:text="9999/12/33" />
+        app:layout_constraintStart_toEndOf="@+id/bookItemThumb"
+        app:layout_constraintTop_toBottomOf="@+id/bookItemCategory"
+        tools:text="2020/10/14" />
 
     <TextView
-        android:id="@+id/bookState"
+        android:id="@+id/bookItemState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_goneMarginEnd="24dp"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bookItemDate"
+        app:layout_constraintEnd_toStartOf="@+id/bookItemProgressPercent"
+        tools:text="Reading" />
+
+    <TextView
+        android:id="@+id/bookItemProgressPercent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
+        android:textColor="?android:textColorSecondary"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bookDate"
+        app:layout_constraintBottom_toBottomOf="@+id/bookItemState"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="Finished" />
+        app:layout_constraintTop_toTopOf="@+id/bookItemState"
+        tools:text="78%" />
 
 </pl.hypeapp.materialtimelineview.MaterialTimelineView>
