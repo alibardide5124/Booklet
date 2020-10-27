@@ -15,7 +15,7 @@ class BookAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.book_item, parent, false)
-        return BookViewHolder(context, view)
+        return BookViewHolder(context, view, this)
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {

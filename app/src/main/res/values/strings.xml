@@ -2,4 +2,14 @@
     <string name="app_name">Booklet</string>
     <string name="new_book">new Book</string>
     <string name="book_thumbnail">Book thumbnail</string>
+    <string name="edt_book_name">Name</string>
+    <string name="edt_book_author_name">Author name</string>
+    <string name="edt_book_publisher">Publisher</string>
+    <string name="edt_book_category">Category</string>
+    <string name="edt_book_date">Date</string>
+    <string name="edt_book_state">State</string>
+    <string name="edt_book_total_pages">Total Pages</string>
+    <string name="edt_book_read_pages">Read Pages</string>
+    <string name="edt_book_description">Description</string>
+    <string name="btn_book_save">Save</string>
 </resources>

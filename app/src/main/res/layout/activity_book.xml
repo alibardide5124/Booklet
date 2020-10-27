@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/edtbookParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -19,12 +20,12 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:src="@drawable/add_pic"
                 android:scaleType="fitCenter"
-                app:layout_constraintWidth_percent="0.3"
+                android:src="@drawable/add_pic"
                 app:layout_constraintBottom_toBottomOf="@+id/bookPublisher"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3" />
 
             <EditText
                 android:id="@+id/bookName"
@@ -33,9 +34,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Name"
+                android:hint="@string/edt_book_name"
                 android:inputType="text"
                 android:singleLine="true"
+                android:maxLength="65"
                 android:textSize="@dimen/edtBook"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bookImage"
@@ -48,9 +50,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Author name"
+                android:hint="@string/edt_book_author_name"
                 android:inputType="text"
                 android:singleLine="true"
+                android:maxLength="65"
                 android:textSize="@dimen/edtBook"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bookImage"
@@ -63,27 +66,26 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Publisher"
+                android:hint="@string/edt_book_publisher"
                 android:inputType="text"
                 android:singleLine="true"
+                android:maxLength="55"
                 android:textSize="@dimen/edtBook"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bookImage"
                 app:layout_constraintTop_toBottomOf="@+id/bookAuthorName" />
 
-            <TextView
+            <EditText
                 android:id="@+id/bookCategory"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:background="?selectableItemBackground"
-                android:focusable="false"
-                android:text="Category"
+                android:hint="@string/edt_book_category"
                 android:inputType="text"
-                android:padding="8dp"
                 android:singleLine="true"
+                android:maxLength="25"
                 android:textSize="@dimen/edtBook"
                 app:layout_constraintEnd_toStartOf="@+id/bookDate"
                 app:layout_constraintStart_toStartOf="parent"
@@ -92,16 +94,17 @@
             <TextView
                 android:id="@+id/bookDate"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:text="Date"
-                android:focusable="false"
+                android:layout_marginEnd="16dp"
+                android:gravity="center_vertical"
                 android:background="?selectableItemBackground"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text="@string/edt_book_date"
                 android:textSize="@dimen/edtBook"
                 app:boxBackgroundColor="#fff"
+                app:layout_constraintBottom_toBottomOf="@+id/bookCategory"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/bookReadPages"
                 app:layout_constraintTop_toBottomOf="@+id/bookPublisher" />
@@ -113,7 +116,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
-                android:text="State"
+                android:text="@string/edt_book_state"
                 android:textSize="@dimen/edtBook"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bookCategory" />
@@ -136,7 +139,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:hint="Total Pages"
+                android:hint="@string/edt_book_total_pages"
                 android:inputType="number"
                 android:maxLength="5"
                 android:singleLine="true"
@@ -152,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Read Pages"
+                android:hint="@string/edt_book_read_pages"
                 android:inputType="number"
                 android:maxLength="5"
                 android:singleLine="true"
@@ -169,9 +172,9 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
-                android:maxLines="10"
-                android:hint="Description"
+                android:hint="@string/edt_book_description"
                 android:inputType="text"
+                android:maxLines="10"
                 android:textSize="@dimen/edtBook"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -189,9 +192,9 @@
         android:layout_marginBottom="24dp"
         android:layout_gravity="bottom"
         app:backgroundTint="@color/colorRed"
-        app:icon="@drawable/ic_plus"
-        app:iconSize="18dp"
-        app:iconTint="?android:textColorPrimaryInverse" />
+        app:icon="@drawable/ic_cancel"
+        app:iconSize="15dp"
+        app:iconTint="@android:color/white" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/bookSave"
@@ -200,13 +203,13 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="24dp"
         android:layout_gravity="bottom|end"
-        android:text="Save"
-        android:textColor="?android:textColorPrimaryInverse"
-        android:textSize="12dp"
+        android:text="@string/btn_book_save"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
         app:backgroundTint="@color/colorAccent"
         app:icon="@drawable/ic_plus"
         app:iconSize="18dp"
-        app:iconTint="?android:textColorPrimaryInverse">
+        app:iconTint="@android:color/white">
 
     </com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton>
 

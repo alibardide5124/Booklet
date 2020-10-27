@@ -1,5 +1,7 @@
 package com.alibardide.booklet.data.model
 
+import java.io.Serializable
+
 data class Book(
     val id: Long = 0,
     val name: String,
@@ -12,4 +14,4 @@ data class Book(
     val progress: Int,
     val state: Int,
     val picLocation: String
-)
+) : Serializable
