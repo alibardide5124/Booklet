@@ -1,5 +1,6 @@
 package com.alibardide.booklet.ui
 
+import android.Manifest
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
@@ -25,6 +26,8 @@ import com.alibardide.booklet.data.repository.AppRepository
 import com.alibardide.booklet.utils.FileUtil
 import com.alibardide.booklet.utils.LoadImage
 import com.google.android.material.snackbar.Snackbar
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.default
@@ -55,10 +58,25 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
 
     private fun init() {
         bookImage.setOnClickListener {
-            if (hasImage)
-                imagePicker()
-            else
-                selectImage()
+            val listener = object: PermissionListener {
+                override fun onPermissionGranted() {
+                    if (hasImage)
+                        imagePicker()
+                    else
+                        selectImage()
+                }
+                override fun onPermissionDenied(deniedPermissions: MutableList<String>?) {
+                    snackBar("Permission Denied")
+                }
+
+            }
+
+            TedPermission.with(this)
+                .setPermissionListener(listener)
+                .setPermissions(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .check()
         }
         bookCancel.setOnClickListener {
             onBackPressed()
