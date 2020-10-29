@@ -13,5 +13,7 @@ data class Book(
     val pages: Int,
     val progress: Int,
     val state: Int,
-    val picLocation: String
+    val picLocation: String,
+    val createdOn: String,
+    val updatedOn: String
 ) : Serializable

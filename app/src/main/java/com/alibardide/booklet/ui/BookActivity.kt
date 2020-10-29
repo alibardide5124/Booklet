@@ -86,7 +86,8 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
         }
 
         val now = Calendar.getInstance()
-        setDate(now[Calendar.YEAR], now[Calendar.MONTH], now[Calendar.DAY_OF_MONTH])
+        bookDate.text =
+            formatDate(now[Calendar.YEAR], now[Calendar.MONTH], now[Calendar.DAY_OF_MONTH])
         bookDate.setOnClickListener {
             val dpd =
                 DatePickerDialog.newInstance(
@@ -233,13 +234,17 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
             val name = if (hasImage) {
                 when {
                     imageFile != null -> {
-                        compressedImage = Compressor.compress(this@BookActivity, imageFile!!)
+                        compressedImage =
+                            Compressor.compress(this@BookActivity, imageFile!!)
                         saveBitmap(compressedImage)
                     }
                     book != null -> book?.picLocation
                     else -> null
                 }
             } else null
+            val now = Calendar.getInstance()
+            val date =
+                formatDate(now[Calendar.YEAR], now[Calendar.MONTH], now[Calendar.DAY_OF_MONTH])
             val newBook = Book(
                 book?.id ?: 0,
                 bookName.text.toString(),
@@ -251,9 +256,12 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
                 if (bookTotalPages.isEnabled) totalPages.toInt() else 0,
                 if (bookReadPages.isEnabled) readPages.toInt() else 0,
                 bookStateSpinner.selectedItemPosition,
-                name ?: ""
+                name ?: "",
+                book?.createdOn ?: date,
+                date
             )
-            if (book != null && !hasImage && book?.picLocation != "") deleteImage(book!!.picLocation)
+            if (book != null && !hasImage && book?.picLocation != "")
+                deleteImage(book!!.picLocation)
             val database = AppDatabase(this@BookActivity)
             val bookDao = BookDao(database)
             val repository = AppRepository(bookDao)
@@ -308,11 +316,10 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
         }
        return result
     }
-    private fun setDate(year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        val date = "$year/" +
+    private fun formatDate(year: Int, monthOfYear: Int, dayOfMonth: Int) : String {
+        return "$year/" +
                 (if (monthOfYear + 1 < 10) "0${monthOfYear + 1}" else monthOfYear + 1) + "/" +
                 (if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth)
-        bookDate.text = date
     }
     private fun snackBar(message: String) {
         Snackbar.make(edtbookParent, message, Snackbar.LENGTH_LONG).show()
@@ -370,6 +377,6 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
         }
     }
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-        setDate(year, monthOfYear, dayOfMonth)
+        bookDate.text = formatDate(year, monthOfYear, dayOfMonth)
     }
 }

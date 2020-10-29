@@ -23,6 +23,8 @@ class AppDatabase(context: Context) :
         const val BOOK_PROGRESS = "progress"
         const val BOOK_STATE = "state"
         const val BOOK_PIC_LOCATION = "picLocation"
+        const val BOOK_CREATED_ON = "createdOn"
+        const val BOOK_UPDATED_ON = "updatedOn"
 
     }
 
@@ -37,8 +39,10 @@ class AppDatabase(context: Context) :
                 "$BOOK_DATE DATE, " +
                 "$BOOK_PAGES INTEGER, " +
                 "$BOOK_PROGRESS INTEGER, " +
-                "$BOOK_STATE INTEGER," +
-                "$BOOK_PIC_LOCATION TEXT);")
+                "$BOOK_STATE INTEGER, " +
+                "$BOOK_PIC_LOCATION TEXT, " +
+                "$BOOK_CREATED_ON DATE, " +
+                "$BOOK_UPDATED_ON DATE);")
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {

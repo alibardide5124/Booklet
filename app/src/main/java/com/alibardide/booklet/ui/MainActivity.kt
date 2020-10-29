@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         val database = AppDatabase(this)
         val bookDao = BookDao(database)
         repository = AppRepository(bookDao)
-        adapter = BookAdapter(this, repository.findAllBooks())
+        adapter = BookAdapter(this, repository.findAllBooks().toMutableList())
 
         mainTimeline.layoutManager = LinearLayoutManager(this)
         mainTimeline.adapter = adapter
