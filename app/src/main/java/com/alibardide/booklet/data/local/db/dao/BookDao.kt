@@ -58,6 +58,8 @@ class BookDao(private val appDatabase: AppDatabase) : BaseDao<Book>(appDatabase)
         contentValues.put(AppDatabase.BOOK_PROGRESS, entity.progress)
         contentValues.put(AppDatabase.BOOK_STATE, entity.state)
         contentValues.put(AppDatabase.BOOK_PIC_LOCATION, entity.picLocation)
+        contentValues.put(AppDatabase.BOOK_CREATED_ON, entity.createdOn)
+        contentValues.put(AppDatabase.BOOK_UPDATED_ON, entity.updatedOn)
     }
 
     override fun cursorToList(cursor: Cursor, db: SQLiteDatabase): List<Book> {
@@ -75,7 +77,9 @@ class BookDao(private val appDatabase: AppDatabase) : BaseDao<Book>(appDatabase)
                     cursor.getInt(cursor.getColumnIndex(AppDatabase.BOOK_PAGES)),
                     cursor.getInt(cursor.getColumnIndex(AppDatabase.BOOK_PROGRESS)),
                     cursor.getInt(cursor.getColumnIndex(AppDatabase.BOOK_STATE)),
-                    cursor.getString(cursor.getColumnIndex(AppDatabase.BOOK_PIC_LOCATION))
+                    cursor.getString(cursor.getColumnIndex(AppDatabase.BOOK_PIC_LOCATION)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabase.BOOK_CREATED_ON)),
+                    cursor.getString(cursor.getColumnIndex(AppDatabase.BOOK_UPDATED_ON))
                 ))
             } while (cursor.moveToNext())
         }

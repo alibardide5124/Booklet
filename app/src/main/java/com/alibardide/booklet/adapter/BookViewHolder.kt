@@ -4,7 +4,10 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.view.View
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.marginTop
 import androidx.recyclerview.widget.RecyclerView
 import com.alibardide.booklet.R
@@ -14,6 +17,7 @@ import com.alibardide.booklet.data.model.Book
 import com.alibardide.booklet.data.repository.AppRepository
 import com.alibardide.booklet.ui.BookActivity
 import com.alibardide.booklet.utils.LoadImage
+import kotlinx.android.synthetic.main.activity_book.view.*
 import kotlinx.android.synthetic.main.book_item.view.*
 import pl.hypeapp.materialtimelineview.MaterialTimelineView
 import java.io.File
@@ -34,7 +38,6 @@ class BookViewHolder(
         setCategory(item.category)
         setDate(item.date)
         setState(item.state)
-        setProgress(item.pages, item.progress)
         setTimeline(timelinePosition)
         setImage(item.picLocation)
     }
@@ -48,19 +51,26 @@ class BookViewHolder(
     }
     private fun setDate(date: String) { itemView.bookItemDate.text = date }
     private fun setState(state: Int) {
-        itemView.bookItemState.text = when (state) {
-            0 -> "Wish list"
-            1 -> "Reading"
-            else -> "Finished"
-        }
-    }
-    private fun setProgress(pages: Int, progress: Int) {
-        if (book.state != 1)
-            itemView.bookItemProgressPercent.visibility = View.GONE
-        else {
-            val percent = (progress * 100.0f / pages).toInt()
-            val percentText = "$percent%"
-            itemView.bookItemProgressPercent.text = percentText
+        when (state) {
+            0 -> {
+                itemView.bookItemState.text = "Wish list"
+                itemView.bookItemState.badgeColor(
+                    ContextCompat.getColor(context, R.color.colorAccent)
+                )
+            }
+            1 -> {
+                val percent = (book.progress * 100.0f / book.pages).toInt().toString()
+                itemView.bookItemState.text = "Reading $percent%"
+                itemView.bookItemState.badgeColor(
+                    ContextCompat.getColor(context, R.color.colorBlack)
+                )
+            }
+            else -> {
+                itemView.bookItemState.text = "Finished"
+                itemView.bookItemState.badgeColor(
+                    ContextCompat.getColor(context, R.color.colorGreen)
+                )
+            }
         }
     }
     private fun setTimeline(position: Int) {
@@ -100,7 +110,7 @@ class BookViewHolder(
             val dialog = alert.create()
             dialog.setOnShowListener {
                 val positive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                positive.setTextColor(context.resources.getColor(R.color.colorRed))
+                positive.setTextColor(ContextCompat.getColor(context, R.color.colorRed))
             }
             dialog.show()
             true
@@ -114,6 +124,9 @@ class BookViewHolder(
                 e.printStackTrace()
             }
         } else itemView.bookItemThumb.setImageResource(R.drawable.add_pic)
+    }
+    private fun TextView.badgeColor(color: Int) {
+        background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
 }

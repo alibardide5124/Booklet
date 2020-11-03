@@ -6,7 +6,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.os.Bundle
 import android.text.Editable
@@ -17,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import com.alibardide.booklet.R
 import com.alibardide.booklet.data.local.db.AppDatabase
 import com.alibardide.booklet.data.local.db.dao.BookDao
@@ -29,8 +27,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.default
 import id.zelory.compressor.loadBitmap
 import kotlinx.android.synthetic.main.activity_book.*
 import kotlinx.coroutines.GlobalScope
@@ -45,7 +43,7 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
     private var hasImage = false
     private var imageFile: File? = null
     private var compressedImage: File? = null
-    private val states = arrayListOf<String>("Wish list", "Reading", "Finished")
+    private val states = arrayListOf("Wish list", "Reading", "Finished")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -245,20 +243,25 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
             val now = Calendar.getInstance()
             val date =
                 formatDate(now[Calendar.YEAR], now[Calendar.MONTH], now[Calendar.DAY_OF_MONTH])
+                    .replace("/", "")
+            val time =
+                formatTime(now[Calendar.HOUR_OF_DAY], now[Calendar.MINUTE], now[Calendar.SECOND])
+                    .replace(":", "")
+            val category = bookCategory.text.toString()
             val newBook = Book(
                 book?.id ?: 0,
                 bookName.text.toString(),
                 bookAuthorName.text.toString(),
                 bookPublisher.text.toString(),
                 bookDescription.text.toString(),
-                bookCategory.text.toString(),
+                if (category == "") "default" else category,
                 bookDate.text.toString(),
                 if (bookTotalPages.isEnabled) totalPages.toInt() else 0,
                 if (bookReadPages.isEnabled) readPages.toInt() else 0,
                 bookStateSpinner.selectedItemPosition,
                 name ?: "",
-                book?.createdOn ?: date,
-                date
+                book?.createdOn ?: "$date$time",
+                "$date$time"
             )
             if (book != null && !hasImage && book?.picLocation != "")
                 deleteImage(book!!.picLocation)
@@ -280,10 +283,6 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
             bookAuthorName.setError()
             result = false
         }
-        if (bookCategory.text.toString() == "") {
-            bookCategory.setError()
-            result = false
-        }
         if (bookTotalPages.isEnabled && bookTotalPages.text.toString() == "") {
             bookTotalPages.setError()
             result = false
@@ -298,17 +297,17 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
     private fun isNumbersValid(pages: Int, progress: Int) : Boolean {
         var result = true
         when {
-            pages < progress -> {
+            bookTotalPages.isEnabled && pages < progress -> {
                 bookReadPages.setError()
                 snackBar("Read pages can\'t be grater than total pages")
                 result = false
             }
-            pages == 0 -> {
+            bookTotalPages.isEnabled && pages == 0 -> {
                 bookTotalPages.setError()
                 snackBar("Number values can\'t be 0")
                 result = false
             }
-            progress == 0 -> {
+            bookReadPages.isEnabled && progress == 0 -> {
                 bookReadPages.setError()
                 snackBar("Number values can\'t be 0")
                 result = false
@@ -320,6 +319,11 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
         return "$year/" +
                 (if (monthOfYear + 1 < 10) "0${monthOfYear + 1}" else monthOfYear + 1) + "/" +
                 (if (dayOfMonth < 10) "0$dayOfMonth" else dayOfMonth)
+    }
+    private fun formatTime(hourOfDay: Int, minute: Int, second: Int) : String{
+        return (if (hourOfDay < 10) "0$hourOfDay" else "$hourOfDay") + ":" +
+                (if (minute < 10) "0$minute" else "$minute") + ":" +
+                (if (second < 10) "0$second" else "$second")
     }
     private fun snackBar(message: String) {
         Snackbar.make(edtbookParent, message, Snackbar.LENGTH_LONG).show()
@@ -379,4 +383,5 @@ class BookActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
         bookDate.text = formatDate(year, monthOfYear, dayOfMonth)
     }
+
 }

@@ -112,24 +112,18 @@
             android:id="@+id/bookItemState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            app:layout_goneMarginEnd="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/badge"
+            android:paddingStart="6dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="6dp"
+            android:paddingBottom="2dp"
+            android:textColor="?android:textColorPrimaryInverse"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/bookItemDate"
-            app:layout_constraintEnd_toStartOf="@+id/bookItemProgressPercent"
-            tools:text="Reading" />
-
-        <TextView
-            android:id="@+id/bookItemProgressPercent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="24dp"
-            android:textColor="?android:textColorSecondary"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/bookItemState"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/bookItemState"
-            tools:text="78%" />
+            app:layout_constraintTop_toTopOf="@+id/bookItemDate"
+            tools:text="Reading 78%" />
 
     </pl.hypeapp.materialtimelineview.MaterialTimelineView>
 
