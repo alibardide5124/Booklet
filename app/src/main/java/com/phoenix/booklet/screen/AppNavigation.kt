@@ -1,12 +1,24 @@
 package com.phoenix.booklet.screen
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.phoenix.booklet.screen.home.HomeRoute
+import kotlinx.serialization.Serializable
 
 @Composable
 fun AppNavigation() {
-    val navController = rememberna
+    val navController = rememberNavController()
+
+    NavHost(navController, startDestination = NavDestinations.Home) {
+        composable<NavDestinations.Home> {
+            HomeRoute()
+        }
+    }
 }
 
 sealed interface NavDestinations {
-
+    @Serializable
+    data object Home: NavDestinations
 }
