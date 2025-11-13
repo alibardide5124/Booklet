@@ -18,6 +18,7 @@ navigation = "2.9.6"
 serializable = "1.9.0"
 hiltNav = "1.3.0"
 room = "2.8.3"
+coil = "3.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -45,6 +46,8 @@ kotlinx-serializable = { module = "org.jetbrains.kotlinx:kotlinx-serialization-j
 room-runtime = { module = "androidx.room:room-runtime", version.ref="room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref="room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref="room" }
+coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

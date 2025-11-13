@@ -10,15 +10,15 @@ import com.phoenix.booklet.data.model.Book
 interface BookDao {
 
     @Insert
-    fun insertBook(book: Book)
+    suspend fun insertBook(book: Book)
 
     @Update
-    fun updateBook(book: Book)
+    suspend fun updateBook(book: Book)
 
     @Query("SELECT * FROM books")
-    fun getAllBooks(): List<Book>
+    suspend fun getAllBooks(): List<Book>
 
     @Query("SELECT * FROM books WHERE id = :id")
-    fun getBookDetails(id: Int): Book
+    suspend fun getBookDetails(id: Int): Book
 
 }

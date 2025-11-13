@@ -1,9 +1,15 @@
 package com.phoenix.booklet.screen.home.component
 
+import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -22,6 +28,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,17 +43,22 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.phoenix.booklet.R
+import com.phoenix.booklet.data.FileResult
 import com.phoenix.booklet.data.model.Book
 import com.phoenix.booklet.data.model.ReadingStatus
-import com.phoenix.booklet.ui.theme.BookletTheme
+import com.phoenix.booklet.utils.deleteFileFromPath
+import com.phoenix.booklet.utils.getUriFromFile
+import com.phoenix.booklet.utils.saveUriAsPhoto
+import java.util.Date
+import java.util.UUID
 
 @Composable
 fun InsertBookBottomSheet(
@@ -55,14 +67,26 @@ fun InsertBookBottomSheet(
     onClickClose: () -> Unit,
     onClickSave: (Book) -> Unit
 ) {
+    var photoUri: Uri? by remember { mutableStateOf(null) }
     var name by remember { mutableStateOf(book?.name ?: "") }
     var author by remember { mutableStateOf(book?.author ?: "") }
     var isTranslated by remember { mutableStateOf(book?.translator != null) }
     var translator by remember { mutableStateOf(book?.translator ?: "") }
-    var status by remember { mutableStateOf(book?.status ?: ReadingStatus.WISHLIST)}
+    var status by remember { mutableStateOf(book?.status ?: ReadingStatus.WISHLIST) }
     var publisher by remember { mutableStateOf(book?.publisher ?: "") }
     var releaseYear by remember { mutableStateOf(book?.releaseYear ?: "") }
     var publishYear by remember { mutableStateOf(book?.publishYear ?: "") }
+
+    var isLoading by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    val pickMedia =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                photoUri = uri
+            } else {
+                Toast.makeText(context, "Failed to load photo", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     Column(
         modifier
@@ -92,17 +116,28 @@ fun InsertBookBottomSheet(
         Row(Modifier.height(IntrinsicSize.Min)) {
             Box(
                 modifier = Modifier
-                    .aspectRatio(2/3f)
+                    .aspectRatio(2 / 3f)
                     .fillMaxHeight()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .clickable { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                 contentAlignment = Alignment.Center,
             ) {
-               Icon(
-                   painter = painterResource(R.drawable.ic_add_photo),
-                   contentDescription = "Add Cover Photo",
-                   tint = MaterialTheme.colorScheme.onSurfaceVariant
-               )
+                if (photoUri != null)
+                    AsyncImage(
+                        model = photoUri,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .aspectRatio(2 / 3f)
+                            .fillMaxHeight()
+                            .clip(RoundedCornerShape(8.dp))
+                    )
+                else
+                    Icon(
+                        painter = painterResource(R.drawable.ic_add_photo),
+                        contentDescription = "Add Cover Photo",
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
             }
             Spacer(Modifier.width(8.dp))
             Column(Modifier.weight(1f)) {
@@ -219,11 +254,53 @@ fun InsertBookBottomSheet(
         }
         Spacer(Modifier.height(16.dp))
         Button(
-            onClick = {  },
+            onClick = {
+                val uuid = book?.id ?: UUID.randomUUID()
+                val pathUri = getUriFromFile(book?.cover)
+                var filePath: String? = book?.cover // Or null
+                // TODO: SAVE ONLY if changed / added
+                if (pathUri != null && pathUri != photoUri) {
+                    deleteFileFromPath(book?.cover)
+                    filePath = null
+                }
+                if (photoUri != null && pathUri != photoUri) {
+                    val result = saveUriAsPhoto(
+                        context = context,
+                        uri = photoUri,
+                        name = uuid.toString()
+                    )
+                    when(result) {
+                        is FileResult.Error -> Unit
+                        is FileResult.Success -> filePath = result.filePath
+                    }
+                }
+                val book = Book(
+                    id = uuid,
+                    name = name,
+                    author = author,
+                    translator = if (isTranslated) translator else null,
+                    publisher = publisher,
+                    releaseYear = releaseYear,
+                    publishYear = publishYear,
+                    cover = filePath,
+                    status = status,
+                    dateCreated = book?.dateCreated ?: Date(System.currentTimeMillis()),
+                    dateUpdated = Date(System.currentTimeMillis())
+                )
+                isLoading = true
+                onClickSave(book)
+            },
             shape = RoundedCornerShape(8.dp),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading && name.isNotBlank() && author.isNotBlank() && (!isTranslated || translator.isNotBlank()) && publisher.isNotBlank() && releaseYear.isNotBlank()
         ) {
-            Text("Save Book")
+            Crossfade(isLoading) { target ->
+                if (target) {
+                    CircularProgressIndicator()
+                } else {
+                    Text("Save Book")
+                }
+            }
         }
     }
 }

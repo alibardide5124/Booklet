@@ -33,7 +33,7 @@ fun HomeRoute(
 
     fun openInsertDialog() {
         coroutineScope.launch {
-            homeViewModel.onAction(HomeUiActions.InsertBook)
+            homeViewModel.onAction(HomeUiActions.InsertBookDialog)
             sheetState.show()
         }
     }
@@ -59,7 +59,12 @@ fun HomeRoute(
                 InsertBookBottomSheet(
                     modifier = Modifier.fillMaxWidth(),
                     onClickClose = { closeDialog() },
-                    onClickSave = {}
+                    onClickSave = {
+                        coroutineScope.launch {
+
+                            closeDialog()
+                        }
+                    }
                 )
             }
 

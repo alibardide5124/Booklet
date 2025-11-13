@@ -1,12 +1,15 @@
 package com.phoenix.booklet.screen.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.phoenix.booklet.data.dao.BookDao
 import com.phoenix.booklet.data.model.Book
+import com.phoenix.booklet.screen.home.HomeDialog.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,12 +28,21 @@ class HomeViewModel @Inject constructor(
             HomeUiActions.DismissDialog ->
                 _uiState.update { it.copy(dialogType = HomeDialog.None) }
 
-            HomeUiActions.InsertBook ->
+            HomeUiActions.InsertBookDialog ->
                 _uiState.update { it.copy(dialogType = HomeDialog.Insert) }
 
-            is HomeUiActions.UpdateBook ->
-                _uiState.update { it.copy(dialogType = HomeDialog.Update(action.book)) }
+            is HomeUiActions.UpdateBookDialog ->
+                _uiState.update { it.copy(dialogType = Update(action.book)) }
 
+            is HomeUiActions.InsertBook ->
+                viewModelScope.launch {
+                    bookDao.insertBook(action.book)
+                }
+
+            is HomeUiActions.UpdateBook ->
+                viewModelScope.launch {
+                    bookDao.updateBook(action.book)
+                }
         }
     }
 
