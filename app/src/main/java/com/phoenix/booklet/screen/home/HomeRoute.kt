@@ -39,8 +39,10 @@ fun HomeRoute(
     }
 
     HomeScreen(
-        books = books,
-        onClickAdd = { openInsertDialog() }
+        books = books.reversed(),
+        onClickAdd = { openInsertDialog() },
+        selectedFilter = uiState.selectedFilter,
+        onSelectFilter = { homeViewModel.onAction(HomeUiActions.ApplyFilter(it)) }
     )
 
     when(uiState.dialogType) {
@@ -54,14 +56,15 @@ fun HomeRoute(
                     shouldDismissOnBackPress = false,
                     shouldDismissOnClickOutside = false
                 ),
-                sheetGesturesEnabled = false
+                sheetGesturesEnabled = false,
+                dragHandle = {},
             ) {
                 InsertBookBottomSheet(
                     modifier = Modifier.fillMaxWidth(),
                     onClickClose = { closeDialog() },
                     onClickSave = {
                         coroutineScope.launch {
-
+                            homeViewModel.onAction(HomeUiActions.InsertBook(it))
                             closeDialog()
                         }
                     }

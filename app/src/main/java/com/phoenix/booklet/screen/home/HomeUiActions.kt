@@ -8,4 +8,5 @@ sealed interface HomeUiActions {
     data class UpdateBookDialog(val book: Book): HomeUiActions
     data class InsertBook(val book: Book): HomeUiActions
     data class UpdateBook(val book: Book): HomeUiActions
+    data class ApplyFilter(val filter: FilterStatus): HomeUiActions
 }

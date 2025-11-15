@@ -12,7 +12,7 @@ import com.phoenix.booklet.data.model.Book
     version = DatabaseConstants.DB_VERSION,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
+@TypeConverters(UUIDConverter::class, DateConverter::class, StatusConverter::class)
 abstract class AppDatabase(): RoomDatabase() {
     abstract fun bookDao(): BookDao
 }

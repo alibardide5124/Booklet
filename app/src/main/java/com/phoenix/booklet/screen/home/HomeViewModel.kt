@@ -23,13 +23,19 @@ class HomeViewModel @Inject constructor(
     private val _books = MutableStateFlow(emptyList<Book>())
     val books = _books.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            _books.update { bookDao.getAllBooks() }
+        }
+    }
+
     fun onAction(action: HomeUiActions) {
         when(action) {
             HomeUiActions.DismissDialog ->
-                _uiState.update { it.copy(dialogType = HomeDialog.None) }
+                _uiState.update { it.copy(dialogType = None) }
 
             HomeUiActions.InsertBookDialog ->
-                _uiState.update { it.copy(dialogType = HomeDialog.Insert) }
+                _uiState.update { it.copy(dialogType = Insert) }
 
             is HomeUiActions.UpdateBookDialog ->
                 _uiState.update { it.copy(dialogType = Update(action.book)) }
@@ -37,12 +43,17 @@ class HomeViewModel @Inject constructor(
             is HomeUiActions.InsertBook ->
                 viewModelScope.launch {
                     bookDao.insertBook(action.book)
+                    _books.update { bookDao.getAllBooks() }
                 }
 
             is HomeUiActions.UpdateBook ->
                 viewModelScope.launch {
                     bookDao.updateBook(action.book)
+                    _books.update { bookDao.getAllBooks() }
                 }
+
+            is HomeUiActions.ApplyFilter ->
+                _uiState.update { it.copy(selectedFilter = action.filter) }
         }
     }
 
