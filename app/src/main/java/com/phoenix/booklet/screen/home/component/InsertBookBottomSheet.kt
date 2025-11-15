@@ -7,12 +7,12 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -43,19 +43,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
+import coil3.compose.rememberAsyncImagePainter
 import com.phoenix.booklet.R
 import com.phoenix.booklet.data.FileResult
 import com.phoenix.booklet.data.model.Book
 import com.phoenix.booklet.data.model.ReadingStatus
 import com.phoenix.booklet.utils.deleteFileFromPath
-import com.phoenix.booklet.utils.getUriFromFile
+import com.phoenix.booklet.utils.getUriFromPath
 import com.phoenix.booklet.utils.saveUriAsPhoto
 import java.util.Date
 import java.util.UUID
@@ -113,23 +114,25 @@ fun InsertBookBottomSheet(
             }
         }
         Spacer(Modifier.height(8.dp))
-        Row(Modifier.height(IntrinsicSize.Min)) {
+        Row(
+            Modifier.fillMaxWidth()
+        ) {
             Box(
                 modifier = Modifier
+                    .fillMaxWidth(.25f)
                     .aspectRatio(2 / 3f)
-                    .fillMaxHeight()
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant)
                     .clickable { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                 contentAlignment = Alignment.Center,
             ) {
                 if (photoUri != null)
-                    AsyncImage(
-                        model = photoUri,
+                    Image(
+                        painter = rememberAsyncImagePainter(photoUri),
+                        contentScale = ContentScale.Crop,
                         contentDescription = null,
                         modifier = Modifier
                             .aspectRatio(2 / 3f)
-                            .fillMaxHeight()
                             .clip(RoundedCornerShape(8.dp))
                     )
                 else
@@ -140,7 +143,11 @@ fun InsertBookBottomSheet(
                     )
             }
             Spacer(Modifier.width(8.dp))
-            Column(Modifier.weight(1f)) {
+            Column(
+                Modifier
+                    .weight(1f)
+                    .fillMaxHeight()
+            ) {
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
@@ -256,7 +263,7 @@ fun InsertBookBottomSheet(
         Button(
             onClick = {
                 val uuid = book?.id ?: UUID.randomUUID()
-                val pathUri = getUriFromFile(book?.cover)
+                val pathUri = getUriFromPath(book?.cover)
                 var filePath: String? = book?.cover // Or null
                 // TODO: SAVE ONLY if changed / added
                 if (pathUri != null && pathUri != photoUri) {
@@ -269,7 +276,7 @@ fun InsertBookBottomSheet(
                         uri = photoUri,
                         name = uuid.toString()
                     )
-                    when(result) {
+                    when (result) {
                         is FileResult.Error -> Unit
                         is FileResult.Success -> filePath = result.filePath
                     }

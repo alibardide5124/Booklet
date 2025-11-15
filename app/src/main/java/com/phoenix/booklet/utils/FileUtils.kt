@@ -1,32 +1,52 @@
 package com.phoenix.booklet.utils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import com.phoenix.booklet.data.FileResult
 import java.io.File
-import java.io.FileOutputStream
+import androidx.core.net.toUri
+
 
 fun saveUriAsPhoto(context: Context, uri: Uri?, name: String): FileResult {
     if (uri == null)
         return FileResult.Error("Uri is null the fuck am I gonna save?")
-    val file = File(context.filesDir, "$name.png")
-    val stream = FileOutputStream(file)
+//    val file = File(context.filesDir, "$name.png")
+//    val stream = FileOutputStream(file)
 
+//        stream.write(uri.toString().toByteArray())
+//        stream.close()
+//        return FileResult.Success("${context.filesDir}/$name.png")
     try {
-        stream.write(uri.toString().toByteArray())
-        stream.close()
-        return FileResult.Success("${context.filesDir}/$name.png")
+        val bitmap = if (Build.VERSION.SDK_INT < 28) {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+        } else {
+            val source = ImageDecoder.createSource(context.contentResolver, uri)
+            ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                decoder.setTargetSampleSize(1) // shrinking by
+                decoder.isMutableRequired = true // this resolve the hardware type of bitmap problem
+            }
+        }
+        val displayName = "$name.png" // Set the name of the image file here
+        val path = "file://${context.filesDir}/$displayName"
+        val fos = context.contentResolver.openOutputStream(path.toUri())!!
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        fos.flush()
+        fos.close()
+        return FileResult.Success(path.slice(8..<path.length))
     } catch (e: Exception) {
         e.printStackTrace()
         return FileResult.Error(e.message)
     }
 }
 
-fun getUriFromFile(path: String?): Uri? {
+fun getUriFromPath(path: String?): Uri? {
     if (path == null)
         return null
-    val file = File(path)
-    return Uri.fromFile(file)
+    return path.toUri()
 }
 
 fun deleteFileFromPath(path: String?) {
