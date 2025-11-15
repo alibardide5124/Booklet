@@ -1,9 +1,12 @@
 package com.phoenix.booklet.screen.home.component
 
+import android.content.Intent
 import android.net.Uri
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -80,12 +83,10 @@ fun InsertBookBottomSheet(
 
     var isLoading by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val pickMedia =
-        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) {
-                photoUri = uri
-            } else {
-                Toast.makeText(context, "Failed to load photo", Toast.LENGTH_SHORT).show()
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.data?.data != null) {
+                photoUri = it.data?.data
             }
         }
 
@@ -123,7 +124,14 @@ fun InsertBookBottomSheet(
                     .aspectRatio(2 / 3f)
                     .clip(RoundedCornerShape(8.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant)
-                    .clickable { pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    .clickable {
+                        val intent = Intent(Intent.ACTION_GET_CONTENT)
+                            .apply {
+                                addCategory(Intent.CATEGORY_OPENABLE)
+                                setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
+                            }
+                        launcher.launch(intent)
+                    },
                 contentAlignment = Alignment.Center,
             ) {
                 if (photoUri != null)
